@@ -1,10 +1,13 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
+const express = require("express")
+const morgan = require("morgan")
+const cors = require("cors")
 
-import contactsRouter from "./routes/contactsRouter.js";
+const contactsRouter = require("./routes/contactsRouter")
+
 
 const app = express();
+
+const PORT = 3000
 
 app.use(morgan("tiny"));
 app.use(cors());
@@ -22,5 +25,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000, () => {
-  console.log("Server is running. Use our API on port: 3000");
+  console.log(`Server is running. Use our API on port: ${PORT}`);
 });
