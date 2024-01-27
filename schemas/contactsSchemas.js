@@ -4,7 +4,7 @@ const updateContactSchema = Joi.object({
     name: Joi.string().min(7).max(30),
     email: Joi.string().email(),
     phone: Joi.string().min(10)
-}).or('name', 'email', 'phone')
+}). min(1)
 
 const createContactSchema = Joi.object({
     name: Joi.string().min(7).max(30).required(),
