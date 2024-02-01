@@ -8,8 +8,8 @@ const validateBody = (schema) =>  async (req, res, next) => {
       await schema.validateAsync(req.body)
       next()
     } catch (error) {
-        const httpError = new HttpError(400, error.message)
-        next(httpError)
+      const httpError = new HttpError(400, error.message);
+      next(httpError)
     }
 };
 

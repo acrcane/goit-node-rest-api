@@ -1,27 +1,41 @@
 const express = require("express")
 const morgan = require("morgan")
 const cors = require("cors")
-const handleError = require("./helpers/handleError")
+const mongoose = require("mongoose")
+const dotenv = require("dotenv")
+// const handleError = require("./helpers/handleError")
 
+dotenv.config()
+const {MONGO_DB_HOST, PORT} = process.env
 const contactsRouter = require("./routes/contactsRouter")
 
 
 const app = express();
 
-const PORT = 3000
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
 
-app.use((_, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+const startServer = async () => {
+    try {
+      await mongoose.connect(MONGO_DB_HOST)
+      console.log("Database connection successful")
 
-app.use(handleError);
+      app.use("/api/contacts", contactsRouter)
 
-app.listen(3000, () => {
-  console.log(`Server is running. Use our API on port: ${PORT}`);
-});
+      app.use((_, res) => {
+        res.status(404).json({ message: "Route not found" });
+      })
+
+      app.listen(PORT, () => {
+        console.log(`Server runing on ${PORT}`);
+      })
+    } catch (error) {
+      console.error("Connection error", error)
+
+      process.exit(1)
+    }
+}
+startServer()
