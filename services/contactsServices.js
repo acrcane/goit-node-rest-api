@@ -1,32 +1,16 @@
-const fs = require("node:fs/promises");
-const path = require("node:path");
-const Contact = require('../models/contact')
-
-const contactsPath = path.join(__dirname, '..', "db", "contacts.json");
-
-async function read() {
-    const data = await fs.readFile(contactsPath, "utf-8");
-
-    return JSON.parse(data);
-}
-
-async function write(data) {
-    return await fs.writeFile(contactsPath, JSON.stringify(data));
-}
+const Contact = require('../models/contacts');
 
 
 
 
 async function listContacts() {
-    const data = await read();
-
-    return data;
+    return Contact.find();
 }
 
 
 async function getContactById(id) {
-    const data = await read();
-    const result = data.find((contact) => contact.id === id);
+
+    const result = Contact.findById(id)
     
     if (!result) {
         return {
@@ -38,49 +22,56 @@ async function getContactById(id) {
 }
 
 
-async function removeContact(contactId) {
-    const data = await read();
-    const index = data.findIndex((contact) => contact.id === contactId);
+async function removeContact(id) {
 
-    if (index === -1) {
-        return null;
+    const result = Contact.findByIdAndDelete(id)
+
+    if(!result){
+        return {
+            status: 404,
+            message: 'Not found'
+        }   
     }
-
-    const deletedContact = data[index]
-    const newContacts = [...data.slice(0, index), ...data.slice(index + 1)];
-
-    await write(newContacts);
-
-    return deletedContact
+    return result
 }
 
 
 async function addContact(payload) {
-    const data = await read();
-    const newContact = new Contact(payload);
-
-    data.push(newContact);
-
-    await write(data);
-
-    return newContact;
+    try {
+        const newContact = new Contact(payload);
+        await newContact.save()
+        return newContact
+    } catch (error) {
+        console.error('Create contact error', error)
+    }
 }
 
 async function updateContactById(id, updateData){
-    const data = await read();
-    const index = data.findIndex((contact) => contact.id === id)
 
-    if(index === -1){
-        return null
+    const result = Contact.findByIdAndUpdate(id, updateData)
+
+    if(!result){
+        return {
+            status: 404,
+            message: 'Not found'
+        }   
     }
+    return result
+}
 
-    const updateCont = {...data[index], ...updateData}
+async function updateStatusContact(id, updateData){
 
-    data[index] = updateCont
-
-    await write(data)
-
-    return updateCont
+    const result = await Contact.findByIdAndUpdate(id, 
+        { $set: { favorite: updateData.favorite } },
+        { new: true }
+    )
+    if(!result){
+        return {
+            status: 404,
+            message: 'Not found'
+        }   
+    }
+    return result
 }
 
 module.exports = {
@@ -88,5 +79,6 @@ module.exports = {
     getContactById,
     removeContact,
     addContact,
-    updateContactById
+    updateContactById,
+    updateStatusContact
 };
