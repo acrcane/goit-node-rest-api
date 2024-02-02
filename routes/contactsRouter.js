@@ -8,7 +8,7 @@ const {
   updateStatusController
 } = require("../controllers/contactsControllers")
 const validateBody = require("../helpers/validateBody")
-const {createContactSchema, updateContactSchema } = require("../schemas/contactsSchemas")
+const {createContactSchema, updateContactSchema} = require("../schemas/contactsSchemas")
 
 
 const contactsRouter = express.Router();

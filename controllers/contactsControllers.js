@@ -55,7 +55,7 @@ const updateContactController = async (req, res) => {
         const updateData = req.body
         const updatedContact = await updateContactById(id, updateData);
         
-        if (!updatedContact) {
+        if (!id) {
             return res.status(404).json({ message: 'Not found' });
         }
 

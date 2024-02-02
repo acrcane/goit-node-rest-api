@@ -3,7 +3,7 @@ const morgan = require("morgan")
 const cors = require("cors")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
-// const handleError = require("./helpers/handleError")
+const handleError = require("./helpers/handleError")
 
 dotenv.config()
 const {MONGO_DB_HOST, PORT} = process.env
@@ -27,6 +27,10 @@ const startServer = async () => {
 
       app.use((_, res) => {
         res.status(404).json({ message: "Route not found" });
+      })
+
+      app.use((err, req, res, next) => {
+        handleError(err, req, res, next)
       })
 
       app.listen(PORT, () => {

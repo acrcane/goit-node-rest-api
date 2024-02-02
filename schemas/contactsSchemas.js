@@ -14,7 +14,9 @@ const updateContactSchema = Joi.object({
 }). min(1)
 
 
+
+
 module.exports = {
     createContactSchema,
-    updateContactSchema
+    updateContactSchema,
 }
