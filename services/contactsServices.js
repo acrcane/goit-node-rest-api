@@ -27,15 +27,20 @@ async function getContactById(id) {
 
 async function removeContact(id) {
 
-    const result = Contact.findByIdAndDelete(id)
+    try {
+        const result = await Contact.findByIdAndDelete(id)
 
-    if(!result){
-        return {
-            status: 404,
-            message: 'Not found'
-        }   
+        if(!result){
+            return {
+                status: 404,
+                message: 'Not found'
+            }   
+        }
+        return result
+    } catch (error) {
+        console.error(error);
     }
-    return result
+
 }
 
 
@@ -52,9 +57,10 @@ async function addContact(payload) {
 async function updateContactById(id, updateData){
 
     try {
-        const result = await Contact.findByIdAndUpdate(id, updateData)
 
+        const result = await Contact.findByIdAndUpdate(id, updateData, { new: true })
         if(!result){
+            console.log('Contact not found:', id)
             return {
                 status: 404,
                 message: 'Not found'
@@ -65,6 +71,7 @@ async function updateContactById(id, updateData){
         console.error(error);
     }
 }
+
 
 async function updateStatusContact(id, updateData){
 

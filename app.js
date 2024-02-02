@@ -12,7 +12,6 @@ const contactsRouter = require("./routes/contactsRouter")
 
 const app = express();
 
-
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
