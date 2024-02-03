@@ -60,7 +60,7 @@ const updateContactController = async (req, res) => {
             return res.status(404).json({ message: 'Not found' });
         }
 
-        res.status(201).json(updatedContact)
+        res.status(200).json(updatedContact)
         } catch (error) {
             console.error(error);
         }
@@ -76,7 +76,7 @@ const updateStatusController = async (req, res) => {
         return res.status(404).json({ message: 'Not found' });
     }
 
-    res.status(201).json(updatedStatus)
+    res.status(200).json(updatedStatus)
    } catch (error) {
     console.error(error);
    }
