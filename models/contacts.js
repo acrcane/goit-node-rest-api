@@ -17,6 +17,6 @@ const mongooseSchema = new Schema ({
           type: Boolean,
           default: false,
         },
-})
+}, {versionKey: false})
 const Contacts = mongoose.model('contacts', mongooseSchema)
 module.exports = Contacts
