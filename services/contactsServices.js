@@ -2,7 +2,6 @@ const Contact = require('../models/contacts');
 
 
 
-
 async function listContacts() {
     return Contact.find();
 }

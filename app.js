@@ -4,10 +4,12 @@ const cors = require("cors")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const handleError = require("./helpers/handleError")
+const contactsRouter = require("./routes/contactsRouter")
+const usersRouter = require('./routes/usersRouter')
+
 
 dotenv.config()
 const {MONGO_DB_HOST, PORT} = process.env
-const contactsRouter = require("./routes/contactsRouter")
 
 
 const app = express();
@@ -22,6 +24,7 @@ const startServer = async () => {
       await mongoose.connect(MONGO_DB_HOST)
       console.log("Database connection successful")
 
+      app.use("/users", usersRouter)
       app.use("/api/contacts", contactsRouter)
 
       app.use((_, res) => {
