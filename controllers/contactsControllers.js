@@ -24,15 +24,15 @@ const getOneContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
-    const contactId = req.params.id
-    const deleteContactById = await removeContact(contactId)
+    const contactId = req.params.id;
+    const deleteContactResult = await removeContact(contactId);
 
-    if(!deleteContactById){
-        return res.status(404).json({message: 'Not found'})
+    if (deleteContactResult.status === 404) {
+        return res.status(404).json({ message: 'Not found' });
     }
 
-    res.status(200).json(deleteContactById)
-};
+    res.status(200).json(deleteContactResult);
+}
 
 const createContact = async (req, res) => {
     try{
@@ -51,27 +51,35 @@ const createContact = async (req, res) => {
 };
 
 const updateContactController = async (req, res) => {
-        const id = req.params.id
-        const updateData = req.body
-        const updatedContact = await updateContactById(id, updateData);
+        try {
+            const id = req.params.id
+            const updateData = req.body
+            const updatedContact = await updateContactById(id, updateData);
         
-        if (!updatedContact) {
+        if (updatedContact.status === 404) {
             return res.status(404).json({ message: 'Not found' });
         }
 
-        res.status(201).json(updatedContact)
+        res.status(200).json(updatedContact)
+        } catch (error) {
+            console.error(error);
+        }
 };
 
 const updateStatusController = async (req, res) => {
+   try {
     const id = req.params.id
 
-    const updatedContact = await updateStatusContact(id, req.body);
+    const updatedStatus = await updateStatusContact(id, req.body);
     
-    if (!updatedContact) {
+    if (updatedStatus.status === 404) {
         return res.status(404).json({ message: 'Not found' });
     }
 
-    res.status(201).json(updatedContact)
+    res.status(200).json(updatedStatus)
+   } catch (error) {
+    console.error(error);
+   }
 };
 
 module.exports = {

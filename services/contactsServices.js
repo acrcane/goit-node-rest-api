@@ -2,37 +2,44 @@ const Contact = require('../models/contacts');
 
 
 
-
 async function listContacts() {
     return Contact.find();
 }
 
 
 async function getContactById(id) {
-
-    const result = Contact.findById(id)
     
-    if (!result) {
-        return {
-            status: 404,
-            message: 'Not found'
+    try {
+        const result = await Contact.findById(id)
+        if (!result) {
+            return {
+                status: 404,
+                message: 'Not found'
+            }
         }
+        return result 
+    } catch (error) {
+        console.error(error);
     }
-    return result || null
 }
 
 
 async function removeContact(id) {
 
-    const result = Contact.findByIdAndDelete(id)
+    try {
+        const result = await Contact.findByIdAndDelete(id)
 
-    if(!result){
-        return {
-            status: 404,
-            message: 'Not found'
-        }   
+        if(!result){
+            return {
+                status: 404,
+                message: 'Not found'
+            }   
+        }
+        return result
+    } catch (error) {
+        console.error(error);
     }
-    return result
+
 }
 
 
@@ -48,30 +55,40 @@ async function addContact(payload) {
 
 async function updateContactById(id, updateData){
 
-    const result = Contact.findByIdAndUpdate(id, updateData)
+    try {
 
-    if(!result){
-        return {
-            status: 404,
-            message: 'Not found'
-        }   
+        const result = await Contact.findByIdAndUpdate(id, updateData, { new: true })
+        if(!result){
+            console.log('Contact not found:', id)
+            return {
+                status: 404,
+                message: 'Not found'
+            }   
+        }
+        return result
+    } catch (error) {
+        console.error(error);
     }
-    return result
 }
+
 
 async function updateStatusContact(id, updateData){
 
-    const result = await Contact.findByIdAndUpdate(id, 
-        { $set: { favorite: updateData.favorite } },
-        { new: true }
-    )
-    if(!result){
-        return {
-            status: 404,
-            message: 'Not found'
-        }   
+    try {
+        const result = await Contact.findByIdAndUpdate(id,    
+            { $set: { favorite: updateData.favorite } },
+            { new: true })
+         
+        if(!result){
+            return {
+                status: 404,
+                message: 'Not found'
+            }   
+        }
+        return result
+    } catch (error) {
+        console.error(error);
     }
-    return result
 }
 
 module.exports = {
