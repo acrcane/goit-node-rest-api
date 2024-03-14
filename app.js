@@ -6,6 +6,8 @@ const dotenv = require("dotenv")
 const handleError = require("./helpers/handleError")
 const contactsRouter = require("./routes/contactsRouter")
 const usersRouter = require('./routes/usersRouter')
+const path = require("path")
+
 
 
 dotenv.config()
@@ -34,6 +36,8 @@ const startServer = async () => {
       app.use((err, req, res, next) => {
         handleError(err, req, res, next)
       })
+
+      app.use('/avatars', express.static(path.join(__dirname, 'public', 'avatars')));
 
       app.listen(PORT, () => {
         console.log(`Server runing on ${PORT}`);
