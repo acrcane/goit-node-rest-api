@@ -5,15 +5,6 @@ dotenv.config()
 
 const {JWT_SECRET} = process.env
 
-// class UsersServices{
-//     // constructor(){}
-
-//     registService = async (payload) => {
-//         const {password, email} = payload 
-
-//     }
-// }
-
 const checkUserEmail = async (email) => {
     const user = await UserModel.findOne({email})
     return user
