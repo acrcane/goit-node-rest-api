@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const HttpError =require('./HttpError')
-const User = require('../models/user')
+const UserModel = require('../models/user')
 const dotenv = require('dotenv')
 dotenv.config()
 const {JWT_SECRET} = process.env
@@ -11,26 +11,25 @@ const authenticate = async (req, res, next) => {
         const { authorization = "" } = req.headers;
 
         if (typeof authorization !== "string") {
-            throw new HttpError(401, "Not authorized")
+            throw HttpError(401, "Not authorized 1")
         }
     
         const [bearer, token] = authorization.split(" ", 2);
     
         if (bearer !== "Bearer") {
-            throw new HttpError(401, "Not authorized")
+            throw HttpError(401, "Not authorized 2")
         }
-        const { id } = jwt.verify(token, JWT_SECRET);
+        const { userId } = jwt.verify(token, JWT_SECRET);
+        const user = await UserModel.findById(userId);
 
-        const user = await User.findById(id);
-
-        if (!user || !token || user.token !== token) {
-            throw new HttpError(401, "Not authorized")
-        }
+        // if (!user || !token || user.token !== token) {
+        //     throw HttpError(401, "Not authorized 3")
+        // }
 
         req.user = user;
         next();
     } catch (error) {
-        const err = new HttpError(401, 'Not authorized')
+        const err = HttpError(401, 'Not authorized 4')
         next(err)
     }
 };
