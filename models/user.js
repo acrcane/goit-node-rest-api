@@ -11,7 +11,6 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        // unique: true,
     },
     subscription: {
         type: String,
@@ -38,10 +37,7 @@ UserSchema.methods.toJSON = function(){
     delete obj.password
     return obj
 }
-// UserSchema.post("save", (res, req, next) => {
-//     error.status = 400
-//     next()
-// })
+
 
 const UserModel = mongoose.model('user', UserSchema)
 
