@@ -21,6 +21,6 @@ const mongooseSchema = new Schema ({
           type: Schema.Types.ObjectId,
           ref: 'user',
         }
-})
+},{versionKey: false})
 const Contacts = mongoose.model('contacts', mongooseSchema)
 module.exports = Contacts

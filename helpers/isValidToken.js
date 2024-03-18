@@ -11,13 +11,13 @@ const authenticate = async (req, res, next) => {
         const { authorization = "" } = req.headers;
 
         if (typeof authorization !== "string") {
-            throw HttpError(401, "Not authorized 1")
+            throw HttpError(401, "Not authorized")
         }
     
         const [bearer, token] = authorization.split(" ", 2);
     
         if (bearer !== "Bearer") {
-            throw HttpError(401, "Not authorized 2")
+            throw HttpError(401, "Not authorized")
         }
         const { userId } = jwt.verify(token, JWT_SECRET);
         const user = await UserModel.findById(userId);
@@ -29,7 +29,7 @@ const authenticate = async (req, res, next) => {
         req.user = user;
         next();
     } catch (error) {
-        const err = HttpError(401, 'Not authorized 4')
+        const err = HttpError(401, 'Not authorized')
         next(err)
     }
 };
