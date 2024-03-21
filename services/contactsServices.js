@@ -1,16 +1,16 @@
-const Contact = require('../models/contacts');
+const Contacts = require('../models/contacts');
 
 
 
 
 async function listContacts() {
-    return Contact.find();
+    return Contacts.find();
 }
 
 
 async function getContactById(id) {
 
-    const result = Contact.findById(id)
+    const result = Contacts.findById(id)
     
     if (!result) {
         return {
@@ -24,7 +24,7 @@ async function getContactById(id) {
 
 async function removeContact(id) {
 
-    const result = Contact.findByIdAndDelete(id)
+    const result = Contacts.findByIdAndDelete(id)
 
     if(!result){
         return {
@@ -36,10 +36,12 @@ async function removeContact(id) {
 }
 
 
-async function addContact(payload) {
+async function addContact(payload, ownerId) {
     try {
-        const newContact = new Contact(payload);
+        console.log(ownerId);
+        const newContact = new Contacts({...payload, owner: ownerId} );
         await newContact.save()
+        console.log(newContact);
         return newContact
     } catch (error) {
         console.error('Create contact error', error)
@@ -48,7 +50,7 @@ async function addContact(payload) {
 
 async function updateContactById(id, updateData){
 
-    const result = Contact.findByIdAndUpdate(id, updateData)
+    const result = Contacts.findByIdAndUpdate(id, updateData)
 
     if(!result){
         return {
@@ -61,7 +63,7 @@ async function updateContactById(id, updateData){
 
 async function updateStatusContact(id, updateData){
 
-    const result = await Contact.findByIdAndUpdate(id, 
+    const result = await Contacts.findByIdAndUpdate(id, 
         { $set: { favorite: updateData.favorite } },
         { new: true }
     )

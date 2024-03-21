@@ -19,7 +19,7 @@ const authenticate = async (req, res, next) => {
         if (bearer !== "Bearer") {
             throw HttpError(401, "Not authorized")
         }
-        const { userId } = jwt.verify(token, JWT_SECRET);
+        const { userId } = await jwt.verify(token, JWT_SECRET);
         const user = await UserModel.findById(userId);
 
         // if (!user || !token || user.token !== token) {

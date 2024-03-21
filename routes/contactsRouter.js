@@ -12,24 +12,30 @@ const {
     createContactSchema,
     updateContactSchema,
 } = require("../schemas/contactsSchemas");
+const isValidId = require('../helpers/isValidId')
+const isValidToken = require('../helpers/isValidToken')
+const checkOwners = require('../helpers/checkOwners')
 const errorWrapper = require("../utils/errorWrapper");
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", errorWrapper(getAllContacts));
+contactsRouter.get("/",isValidToken, checkOwners, errorWrapper(getAllContacts));
 
-contactsRouter.get("/:id", errorWrapper(getOneContact));
+contactsRouter.get("/:id",isValidToken, checkOwners, isValidId, errorWrapper(getOneContact));
 
 contactsRouter.delete("/:id", errorWrapper(deleteContact));
 
 contactsRouter.post(
     "/",
+    isValidToken, 
+    // isValidId,
+    checkOwners,
     validateBody(createContactSchema),
     errorWrapper(createContact)
 );
 
 contactsRouter.put(
-    "/:id",
+    "/:id",isValidToken, isValidId,checkOwners,
     validateBody(updateContactSchema),
     errorWrapper(updateContactController)
 );

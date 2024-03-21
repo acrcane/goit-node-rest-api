@@ -5,7 +5,7 @@ const {
     checkUserEmail, 
     createUser,
     findById,
-} = require('../services/usersServices')
+} = require('../services/usersServices');
 
 
 

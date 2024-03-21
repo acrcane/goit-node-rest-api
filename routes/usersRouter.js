@@ -2,7 +2,6 @@ const express = require("express")
 const validateBody = require('../helpers/validateBody')
 const userSchema = require('../schemas/usersSchema')
 const isValidToken = require('../helpers/isValidToken')
-// const authenticate = require('../helpers/isValidToken')
 const errorWrapper = require('../utils/errorWrapper')
 const {
     signup,
