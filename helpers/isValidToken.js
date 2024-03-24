@@ -22,9 +22,9 @@ const authenticate = async (req, res, next) => {
         const { userId } = await jwt.verify(token, JWT_SECRET);
         const user = await UserModel.findById(userId);
 
-        // if (!user || !token || user.token !== token) {
-        //     throw HttpError(401, "Not authorized 3")
-        // }
+        if (!user || !token || user.token !== token) {
+            throw HttpError(401, "Not authorized 3")
+        }
 
         req.user = user;
         next();

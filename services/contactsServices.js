@@ -1,10 +1,7 @@
 const Contacts = require('../models/contacts');
 
-
-
-
-async function listContacts() {
-    return Contacts.find();
+async function listContacts(ownerId) {
+    return Contacts.find({owner: ownerId});
 }
 
 
@@ -36,12 +33,10 @@ async function removeContact(id) {
 }
 
 
-async function addContact(payload, ownerId) {
+async function addContact(payload, owner) {
     try {
-        console.log(ownerId);
-        const newContact = new Contacts({...payload, owner: ownerId} );
+        const newContact = new Contacts({...payload, owner} );
         await newContact.save()
-        console.log(newContact);
         return newContact
     } catch (error) {
         console.error('Create contact error', error)

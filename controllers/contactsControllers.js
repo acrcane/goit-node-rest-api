@@ -6,11 +6,12 @@ const {
     updateContactById,
     updateStatusContact
 } = require("../services/contactsServices")
-// const jwt = require("jsonwebtoken")
+
 
 
 const getAllContacts = async (req, res) => {
-    const allContacts = await listContacts()
+    const { _id: owner } = req.user
+    const allContacts = await listContacts(owner)
     res.status(200).json(allContacts)
 };
 
@@ -39,14 +40,12 @@ const deleteContact = async (req, res) => {
 
 const createContact = async (req, res) => {
     try{
-        // const decodedToken = jwt.decode(req.headers.authorization);
-        // console.log(decodedToken._id);
-        const createdContact = await addContact(req.body, decodedToken._id);
-        
+        const owner = req.user._id
+        const createdContact = await addContact({...req.body}, owner);
+        console.log(owner);
         if (!createdContact) {
             return res.status(400).json({ message: 'Not created' });
         }
-        // console.log(decodedToken);
         res.status(201).json(createdContact)
     
     } catch (error) {

@@ -22,9 +22,9 @@ const UserSchema = new Schema({
         type: String,
         default: "",
     },
-    avatar: {
-        type: String
-    }
+    // avatar: {
+    //     type: String
+    // }
 }, {versionKey: false})
 
 
