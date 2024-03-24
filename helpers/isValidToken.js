@@ -23,9 +23,9 @@ const authenticate = async (req, res, next) => {
         const user = await UserModel.findById(userId);
 
         if (!user || !token || user.token !== token) {
-            throw HttpError(401, "Not authorized 3")
+            throw HttpError(401, "Not authorized")
         }
-
+        console.log(userId);
         req.user = user;
         next();
     } catch (error) {

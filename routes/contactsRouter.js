@@ -14,16 +14,16 @@ const {
 } = require("../schemas/contactsSchemas");
 const isValidId = require('../helpers/isValidId')
 const isValidToken = require('../helpers/isValidToken')
-// const checkOwners = require('../helpers/checkOwners')
+const checkOwners = require('../helpers/checkOwners')
 const errorWrapper = require("../utils/errorWrapper");
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", isValidToken,errorWrapper(getAllContacts));
+contactsRouter.get("/", isValidToken, errorWrapper(getAllContacts));
 
 contactsRouter.get("/:id",isValidToken, isValidId, errorWrapper(getOneContact));
 
-contactsRouter.delete("/:id", isValidToken, isValidId, errorWrapper(deleteContact));
+contactsRouter.delete("/:id", isValidToken, checkOwners, isValidId, errorWrapper(deleteContact));
 
 contactsRouter.post(
     "/",
@@ -33,7 +33,7 @@ contactsRouter.post(
 );
 
 contactsRouter.put(
-    "/:id",isValidToken, isValidId,
+    "/:id",isValidToken, isValidId, checkOwners,
     validateBody(updateContactSchema),
     errorWrapper(updateContactController)
 );
