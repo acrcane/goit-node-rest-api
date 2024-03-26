@@ -53,6 +53,12 @@ contactsRouter.put(
     errorWrapper(updateContactController)
 );
 
-contactsRouter.patch("/:id/favorite", updateStatusController);
+contactsRouter.patch(
+    "/:id/favorite",
+    isValidToken,
+    isValidId,
+    checkOwners,
+    errorWrapper(updateStatusController)
+);
 
 module.exports = contactsRouter;
