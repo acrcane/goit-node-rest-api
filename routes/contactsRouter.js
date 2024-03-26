@@ -12,28 +12,43 @@ const {
     createContactSchema,
     updateContactSchema,
 } = require("../schemas/contactsSchemas");
-const isValidId = require('../helpers/isValidId')
-const isValidToken = require('../helpers/isValidToken')
-const checkOwners = require('../helpers/checkOwners')
+const isValidId = require("../helpers/isValidId");
+const isValidToken = require("../helpers/isValidToken");
+const checkOwners = require("../helpers/checkOwners");
 const errorWrapper = require("../utils/errorWrapper");
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", isValidToken, errorWrapper(getAllContacts));
 
-contactsRouter.get("/:id",isValidToken, isValidId, errorWrapper(getOneContact));
+contactsRouter.get(
+    "/:id",
+    isValidToken,
+    isValidId,
+    checkOwners,
+    errorWrapper(getOneContact)
+);
 
-contactsRouter.delete("/:id", isValidToken, checkOwners, isValidId, errorWrapper(deleteContact));
+contactsRouter.delete(
+    "/:id",
+    isValidToken,
+    checkOwners,
+    isValidId,
+    errorWrapper(deleteContact)
+);
 
 contactsRouter.post(
     "/",
-    isValidToken, 
+    isValidToken,
     validateBody(createContactSchema),
-    errorWrapper(createContact),
+    errorWrapper(createContact)
 );
 
 contactsRouter.put(
-    "/:id",isValidToken, isValidId, checkOwners,
+    "/:id",
+    isValidToken,
+    isValidId,
+    checkOwners,
     validateBody(updateContactSchema),
     errorWrapper(updateContactController)
 );
